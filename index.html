@@ -268,6 +268,123 @@
 
 
   
+    <article id="post-02-词法分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/06/08/02-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/">02-词法分析</a>
+    </h1>
+  
+
+        
+        <a href="/2023/06/08/02-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/" class="archive-article-date">
+  	<time datetime="2023-06-08T13:24:57.271Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-06-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="断词"><a href="#断词" class="headerlink" title="断词"></a>断词</h1><ol>
+<li>写出正则表达式</li>
+<li>画出有限自动机</li>
+<li>代码</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># initToken(ch)</span></span><br><span class="line">DFA_state new_state = DFA_state.INIT</span><br><span class="line"><span class="keyword">if</span> isAlpha(ch):</span><br><span class="line">	new_state = DFA_state.ID</span><br><span class="line">	token.<span class="built_in">type</span> = TokenType.Identifier</span><br><span class="line">	token_text.append(ch)</span><br><span class="line"><span class="keyword">elif</span> isDigit(ch):</span><br><span class="line">	new_state = DFA_state.IntLiteral</span><br><span class="line">	token.<span class="built_in">type</span> = TokenType.IntLiteral</span><br><span class="line">	token_text.append(ch)</span><br><span class="line"><span class="keyword">elif</span> ch == <span class="string">&#x27;&gt;&#x27;</span>:</span><br><span class="line">	new_state = DFA_state.GT</span><br><span class="line">	token.<span class="built_in">type</span> = TokenType.GT</span><br><span class="line">	token_text.append(ch)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>Token有两个属性</p>
+<ul>
+<li><code>type</code> : 类型（枚举类型的值）</li>
+<li><code>text</code> : 文本值</li>
+</ul>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> Initial:</span><br><span class="line">	state = initToken(ch);</span><br><span class="line"><span class="keyword">case</span> ID:</span><br><span class="line">	<span class="keyword">if</span> isAlpha(ch) <span class="keyword">or</span> isDigit(ch):</span><br><span class="line">		token_text.append(ch)</span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		state = initToken(ch) <span class="comment"># 退出ID状态，保存Token</span></span><br><span class="line">	<span class="keyword">break</span></span><br><span class="line"><span class="keyword">case</span> IntLiteral:</span><br><span class="line">	<span class="keyword">if</span> isDigit(ch) :</span><br><span class="line">		token_text.append(ch)</span><br><span class="line">	<span class="keyword">else</span> :</span><br><span class="line">		state = initToken(ch)</span><br><span class="line">	<span class="keyword">break</span></span><br><span class="line"><span class="keyword">case</span> GT:</span><br><span class="line">	<span class="keyword">if</span> ch == <span class="string">&#x27;=&#x27;</span>:</span><br><span class="line">		token.<span class="built_in">type</span> = TokenType.GE</span><br><span class="line">		state = DFA_state.GE</span><br><span class="line">		tokenText.append(ch)</span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		state = initToken(ch)</span><br><span class="line">	<span class="keyword">break</span></span><br><span class="line"><span class="keyword">case</span> GE:</span><br><span class="line">	state = initToken(ch)</span><br><span class="line">	<span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>词法分析的核心，就是依据构造好的DFA，在不同的状态迁移，从而解析出Token，只要再扩展这个有限自动机，增加里面的状态和迁移路线，就可以逐步实现一个完整的词法分析器。</p>
+</li>
+</ul>
+<h1 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h1><ul>
+<li>为了更加形式化地描述词法规则。</li>
+<li>优化<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ID: [a-zA-Z_]([a-zA-Z_]|[0-9])*</span><br><span class="line">IntLiteral: [0-9]+</span><br><span class="line">GT: <span class="string">&#x27;&gt;&#x27;</span></span><br><span class="line">GE: <span class="string">&#x27;&gt;=&#x27;</span></span><br></pre></td></tr></table></figure></li>
+<li>不同工具的RE写法会略有不同，参考具体文档<ul>
+<li>比如Java的正则表达式工具在java.util.regex包中，在Javadoc中有详细的规则说明</li>
+</ul>
+</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">编译原理</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Part1-前端</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/编译原理//" class="article-tag-list-link color5">编译原理</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/编译原理/Part1-前端//" class="article-tag-list-link color4">Part1-前端</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2023/06/08/02-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-00-学习理由" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -390,123 +507,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2023/06/08/00-%E5%AD%A6%E4%B9%A0%E7%90%86%E7%94%B1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-02-词法分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/06/08/02-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/">02-词法分析</a>
-    </h1>
-  
-
-        
-        <a href="/2023/06/08/02-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/" class="archive-article-date">
-  	<time datetime="2023-06-08T13:24:57.271Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-06-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="断词"><a href="#断词" class="headerlink" title="断词"></a>断词</h1><ol>
-<li>写出正则表达式</li>
-<li>画出有限自动机</li>
-<li>代码</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># initToken(ch)</span></span><br><span class="line">DFA_state new_state = DFA_state.INIT</span><br><span class="line"><span class="keyword">if</span> isAlpha(ch):</span><br><span class="line">	new_state = DFA_state.ID</span><br><span class="line">	token.<span class="built_in">type</span> = TokenType.Identifier</span><br><span class="line">	token_text.append(ch)</span><br><span class="line"><span class="keyword">elif</span> isDigit(ch):</span><br><span class="line">	new_state = DFA_state.IntLiteral</span><br><span class="line">	token.<span class="built_in">type</span> = TokenType.IntLiteral</span><br><span class="line">	token_text.append(ch)</span><br><span class="line"><span class="keyword">elif</span> ch == <span class="string">&#x27;&gt;&#x27;</span>:</span><br><span class="line">	new_state = DFA_state.GT</span><br><span class="line">	token.<span class="built_in">type</span> = TokenType.GT</span><br><span class="line">	token_text.append(ch)</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>Token有两个属性</p>
-<ul>
-<li><code>type</code> : 类型（枚举类型的值）</li>
-<li><code>text</code> : 文本值</li>
-</ul>
-  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> Initial:</span><br><span class="line">	state = initToken(ch);</span><br><span class="line"><span class="keyword">case</span> ID:</span><br><span class="line">	<span class="keyword">if</span> isAlpha(ch) <span class="keyword">or</span> isDigit(ch):</span><br><span class="line">		token_text.append(ch)</span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		state = initToken(ch) <span class="comment"># 退出ID状态，保存Token</span></span><br><span class="line">	<span class="keyword">break</span></span><br><span class="line"><span class="keyword">case</span> IntLiteral:</span><br><span class="line">	<span class="keyword">if</span> isDigit(ch) :</span><br><span class="line">		token_text.append(ch)</span><br><span class="line">	<span class="keyword">else</span> :</span><br><span class="line">		state = initToken(ch)</span><br><span class="line">	<span class="keyword">break</span></span><br><span class="line"><span class="keyword">case</span> GT:</span><br><span class="line">	<span class="keyword">if</span> ch == <span class="string">&#x27;=&#x27;</span>:</span><br><span class="line">		token.<span class="built_in">type</span> = TokenType.GE</span><br><span class="line">		state = DFA_state.GE</span><br><span class="line">		tokenText.append(ch)</span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		state = initToken(ch)</span><br><span class="line">	<span class="keyword">break</span></span><br><span class="line"><span class="keyword">case</span> GE:</span><br><span class="line">	state = initToken(ch)</span><br><span class="line">	<span class="keyword">break</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>词法分析的核心，就是依据构造好的DFA，在不同的状态迁移，从而解析出Token，只要再扩展这个有限自动机，增加里面的状态和迁移路线，就可以逐步实现一个完整的词法分析器。</p>
-</li>
-</ul>
-<h1 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h1><ul>
-<li>为了更加形式化地描述词法规则。</li>
-<li>优化<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ID: [a-zA-Z_]([a-zA-Z_]|[0-9])*</span><br><span class="line">IntLiteral: [0-9]+</span><br><span class="line">GT: <span class="string">&#x27;&gt;&#x27;</span></span><br><span class="line">GE: <span class="string">&#x27;&gt;=&#x27;</span></span><br></pre></td></tr></table></figure></li>
-<li>不同工具的RE写法会略有不同，参考具体文档<ul>
-<li>比如Java的正则表达式工具在java.util.regex包中，在Javadoc中有详细的规则说明</li>
-</ul>
-</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">编译原理</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Part1-前端</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/编译原理//" class="article-tag-list-link color5">编译原理</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/编译原理/Part1-前端//" class="article-tag-list-link color4">Part1-前端</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2023/06/08/02-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/">展开全文 >></a>
         </p>
       
 
