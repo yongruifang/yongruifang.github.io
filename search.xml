@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>01-前端概览</title>
+      <link href="/2023/06/08/01-%E5%89%8D%E7%AB%AF%E6%A6%82%E8%A7%88/"/>
+      <url>/2023/06/08/01-%E5%89%8D%E7%AB%AF%E6%A6%82%E8%A7%88/</url>
+      
+        <content type="html"><![CDATA[<h1 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h1><ul><li>手写 - 有限自动机</li><li>工具 - Lex，基于正则表达式</li></ul><h1 id="语法分析"><a href="#语法分析" class="headerlink" title="语法分析"></a>语法分析</h1><ul><li>执行脚本语言的过程，就是遍历AST（抽象语法树）的过程</li><li>知道AST的作用以后，那么，怎么构造AST？<ul><li>自顶向下：递归下降</li><li>自底向上：搭积木，先构造小单元，在组装更大单元</li><li>现成的工具：Yacc Antlr JavaCC…</li></ul></li></ul><h1 id="语义分析"><a href="#语义分析" class="headerlink" title="语义分析"></a>语义分析</h1><ul><li>消除语义模糊，生成一些属性信息，让计算机能够依据这些信息生成目标代码</li><li>语义分析的某些成果，会作为属性标注在AST上<ul><li>比如在age这个标识符节点和45这个字节量节点上都会标识int类型</li></ul></li><li>树上还可以标记很多属性，有些属性在之前节点已经标注，比如行号</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编译原理 </category>
+          
+          <category> Part1-前端 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 编译原理 </tag>
+            
+            <tag> Part1-前端 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>02-词法分析</title>
+      <link href="/2023/06/08/02-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/"/>
+      <url>/2023/06/08/02-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/</url>
+      
+        <content type="html"><![CDATA[<h1 id="断词"><a href="#断词" class="headerlink" title="断词"></a>断词</h1><ol><li>写出正则表达式</li><li>画出有限自动机</li><li>代码</li></ol><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># initToken(ch)</span></span><br><span class="line">DFA_state new_state = DFA_state.INIT</span><br><span class="line"><span class="keyword">if</span> isAlpha(ch):</span><br><span class="line">new_state = DFA_state.ID</span><br><span class="line">token.<span class="built_in">type</span> = TokenType.Identifier</span><br><span class="line">token_text.append(ch)</span><br><span class="line"><span class="keyword">elif</span> isDigit(ch):</span><br><span class="line">new_state = DFA_state.IntLiteral</span><br><span class="line">token.<span class="built_in">type</span> = TokenType.IntLiteral</span><br><span class="line">token_text.append(ch)</span><br><span class="line"><span class="keyword">elif</span> ch == <span class="string">&#x27;&gt;&#x27;</span>:</span><br><span class="line">new_state = DFA_state.GT</span><br><span class="line">token.<span class="built_in">type</span> = TokenType.GT</span><br><span class="line">token_text.append(ch)</span><br></pre></td></tr></table></figure><ul><li><p>Token有两个属性</p><ul><li><code>type</code> : 类型（枚举类型的值）</li><li><code>text</code> : 文本值</li></ul>  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> Initial:</span><br><span class="line">state = initToken(ch);</span><br><span class="line"><span class="keyword">case</span> ID:</span><br><span class="line"><span class="keyword">if</span> isAlpha(ch) <span class="keyword">or</span> isDigit(ch):</span><br><span class="line">token_text.append(ch)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">state = initToken(ch) <span class="comment"># 退出ID状态，保存Token</span></span><br><span class="line"><span class="keyword">break</span></span><br><span class="line"><span class="keyword">case</span> IntLiteral:</span><br><span class="line"><span class="keyword">if</span> isDigit(ch) :</span><br><span class="line">token_text.append(ch)</span><br><span class="line"><span class="keyword">else</span> :</span><br><span class="line">state = initToken(ch)</span><br><span class="line"><span class="keyword">break</span></span><br><span class="line"><span class="keyword">case</span> GT:</span><br><span class="line"><span class="keyword">if</span> ch == <span class="string">&#x27;=&#x27;</span>:</span><br><span class="line">token.<span class="built_in">type</span> = TokenType.GE</span><br><span class="line">state = DFA_state.GE</span><br><span class="line">tokenText.append(ch)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">state = initToken(ch)</span><br><span class="line"><span class="keyword">break</span></span><br><span class="line"><span class="keyword">case</span> GE:</span><br><span class="line">state = initToken(ch)</span><br><span class="line"><span class="keyword">break</span></span><br></pre></td></tr></table></figure></li><li><p>词法分析的核心，就是依据构造好的DFA，在不同的状态迁移，从而解析出Token，只要再扩展这个有限自动机，增加里面的状态和迁移路线，就可以逐步实现一个完整的词法分析器。</p></li></ul><h1 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h1><ul><li>为了更加形式化地描述词法规则。</li><li>优化<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ID: [a-zA-Z_]([a-zA-Z_]|[0-9])*</span><br><span class="line">IntLiteral: [0-9]+</span><br><span class="line">GT: <span class="string">&#x27;&gt;&#x27;</span></span><br><span class="line">GE: <span class="string">&#x27;&gt;=&#x27;</span></span><br></pre></td></tr></table></figure></li><li>不同工具的RE写法会略有不同，参考具体文档<ul><li>比如Java的正则表达式工具在java.util.regex包中，在Javadoc中有详细的规则说明</li></ul></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编译原理 </category>
+          
+          <category> Part1-前端 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 编译原理 </tag>
+            
+            <tag> Part1-前端 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>00-学习理由</title>
+      <link href="/2023/06/08/00-%E5%AD%A6%E4%B9%A0%E7%90%86%E7%94%B1/"/>
+      <url>/2023/06/08/00-%E5%AD%A6%E4%B9%A0%E7%90%86%E7%94%B1/</url>
+      
+        <content type="html"><![CDATA[<ul><li>很多国外厂商的软件，普遍都具备二次编程能力，拥有自己的语言和生态。</li></ul><h1 id="联系"><a href="#联系" class="headerlink" title="联系"></a>联系</h1><ul><li>作为程序员，在实际工作中经常会碰到需要编译技术的场景<ul><li>Hibernate &amp; HQL的解析</li><li>Spring &amp; 注解的支持和字节码动态生成</li><li>模板引擎 &amp; 条件分支、循环</li><li>解析用户输入</li><li>防止代码注入</li><li>提供像React那样的DSL</li><li>提供像TypeScript那样的把一门语言翻成另一门</li><li>像CMake和Maven那样通过配置文件来灵活工作</li><li>运维工程师分析日志文件</li></ul></li><li>提升程序员的竞争力<ul><li>理解底层机制，深入思考问题</li><li>培养深层次解决问题的能力，而不仅从表面解决问题</li></ul></li><li>维度<ul><li>前端语法</li><li>代码优化</li><li>硬件结合</li></ul></li></ul><h1 id="克服畏难心理"><a href="#克服畏难心理" class="headerlink" title="克服畏难心理"></a>克服畏难心理</h1><ul><li>通过具体案例理解抽象原理</li><li>切实体会某个技术在哪个环节中发挥什么作用</li><li>在工作中真正运用到编译技术<ul><li>Antlr工具的使用：做编译器前端</li><li>LLVM工具的使用：做编译器后端</li></ul></li></ul><h1 id="课程规划"><a href="#课程规划" class="headerlink" title="课程规划"></a>课程规划</h1><ol><li>编译器前端，即词法、语法、语义三大分析<ul><li>了解原理</li><li>实现一门脚本语言</li><li>使用工具提升编译工作的效率</li><li>在应用场景中检验学习成果</li></ul></li><li>编译器后端，如何生成目标代码和对代码进行优化<ul><li>纯手工生成汇编代码</li><li>引入中间代码</li><li>使用后端工具LLVM</li><li>生成可执行文件能支持及时编译</li><li>多层优化</li></ul></li><li>发展趋势<ul><li>人工智能</li><li>云编程</li></ul></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编译原理 </category>
+          
+          <category> 开篇 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 编译原理 </tag>
+            
+            <tag> 开篇 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+</search>
