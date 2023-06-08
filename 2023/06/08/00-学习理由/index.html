@@ -1,347 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>00-学习理由 | Hexo</title>
-  <meta name="keywords" content=" 编译原理 , 开篇 ">
-  <meta name="description" content="00-学习理由 | Hexo">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="词法分析 手写 - 有限自动机 工具 - Lex，基于正则表达式  语法分析 执行脚本语言的过程，就是遍历AST（抽象语法树）的过程 知道AST的作用以后，那么，怎么构造AST？ 自顶向下：递归下降 自底向上：搭积木，先构造小单元，在组装更大单元 现成的工具：Yacc Antlr JavaCC…    语义分析 消除语义模糊，生成一些属性信息，让计算机能够依据这些信息生成目标代码 语义分析的某些成">
-<meta property="og:type" content="article">
-<meta property="og:title" content="01-前端概览">
-<meta property="og:url" content="http://yongruifang.github.io/2023/06/08/01-%E5%89%8D%E7%AB%AF%E6%A6%82%E8%A7%88/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="词法分析 手写 - 有限自动机 工具 - Lex，基于正则表达式  语法分析 执行脚本语言的过程，就是遍历AST（抽象语法树）的过程 知道AST的作用以后，那么，怎么构造AST？ 自顶向下：递归下降 自底向上：搭积木，先构造小单元，在组装更大单元 现成的工具：Yacc Antlr JavaCC…    语义分析 消除语义模糊，生成一些属性信息，让计算机能够依据这些信息生成目标代码 语义分析的某些成">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-06-08T13:24:57.286Z">
-<meta property="article:modified_time" content="2023-06-08T14:22:54.413Z">
-<meta property="article:author" content="Ryon">
-<meta property="article:tag" content="编译原理">
-<meta property="article:tag" content="Part1-前端">
-<meta name="twitter:card" content="summary">
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>00-学习理由 - Ryon_blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Ryon_blog"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ryon_blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="很多国外厂商的软件，普遍都具备二次编程能力，拥有自己的语言和生态。  联系 作为程序员，在实际工作中经常会碰到需要编译技术的场景 Hibernate &amp;amp; HQL的解析 Spring &amp;amp; 注解的支持和字节码动态生成 模板引擎 &amp;amp; 条件分支、循环 解析用户输入 防止代码注入 提供像React那样的DSL 提供像TypeScript那样的把一门语言翻成另一门 像CMake和Ma"><meta property="og:type" content="blog"><meta property="og:title" content="00-学习理由"><meta property="og:url" content="http://yongruifang.github.io/2023/06/08/00-%E5%AD%A6%E4%B9%A0%E7%90%86%E7%94%B1/"><meta property="og:site_name" content="Ryon_blog"><meta property="og:description" content="很多国外厂商的软件，普遍都具备二次编程能力，拥有自己的语言和生态。  联系 作为程序员，在实际工作中经常会碰到需要编译技术的场景 Hibernate &amp;amp; HQL的解析 Spring &amp;amp; 注解的支持和字节码动态生成 模板引擎 &amp;amp; 条件分支、循环 解析用户输入 防止代码注入 提供像React那样的DSL 提供像TypeScript那样的把一门语言翻成另一门 像CMake和Ma"><meta property="og:locale" content="en_US"><meta property="og:image" content="http://yongruifang.github.io/img/og_image.png"><meta property="article:published_time" content="2023-06-08T13:24:57.271Z"><meta property="article:modified_time" content="2023-06-08T14:22:38.775Z"><meta property="article:author" content="Ryon"><meta property="article:tag" content="编译原理"><meta property="article:tag" content="开篇"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="http://yongruifang.github.io/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://yongruifang.github.io/2023/06/08/00-%E5%AD%A6%E4%B9%A0%E7%90%86%E7%94%B1/"},"headline":"00-学习理由","image":["http://yongruifang.github.io/img/og_image.png"],"datePublished":"2023-06-08T13:24:57.271Z","dateModified":"2023-06-08T14:22:38.775Z","author":{"@type":"Person","name":"Ryon"},"publisher":{"@type":"Organization","name":"Ryon_blog","logo":{"@type":"ImageObject","url":"http://yongruifang.github.io/img/logo.svg"}},"description":"很多国外厂商的软件，普遍都具备二次编程能力，拥有自己的语言和生态。  联系 作为程序员，在实际工作中经常会碰到需要编译技术的场景 Hibernate &amp; HQL的解析 Spring &amp; 注解的支持和字节码动态生成 模板引擎 &amp; 条件分支、循环 解析用户输入 防止代码注入 提供像React那样的DSL 提供像TypeScript那样的把一门语言翻成另一门 像CMake和Ma"}</script><link rel="canonical" href="http://yongruifang.github.io/2023/06/08/00-%E5%AD%A6%E4%B9%A0%E7%90%86%E7%94%B1/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
 
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
 
-<link rel="icon" href="/img/avatar.jpg">
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
 
-<link href="/css/style.css?v=1.1.0" rel="stylesheet">
-
-<link href="/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
-
-<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
-
-<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-<script src="/js/titleTip.js?v=1.1.0" ></script>
-
-<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
-<script>
-    hljs.initHighlightingOnLoad();
-</script>
-
-<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
-
-
-
-<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
-
-<script src="/js/iconfont.js?v=1.1.0" ></script>
-
-<meta name="generator" content="Hexo 6.3.0"></head>
-<div style="display: none">
-  <input class="theme_disqus_on" value="false">
-  <input class="theme_preload_comment" value="">
-  <input class="theme_blog_path" value="">
-  <input id="theme_shortcut" value="true" />
-  <input id="theme_highlight_on" value="true" />
-  <input id="theme_code_copy" value="true" />
-</div>
-
-
-
-<body>
-<aside class="nav">
-    <div class="nav-left">
-        <a href="/"
-   class="avatar_target">
-    <img class="avatar"
-         src="/img/avatar.jpg"/>
-</a>
-<div class="author">
-    <span>Ryon</span>
-</div>
-
-<div class="icon">
-    
-</div>
-
-
-
-    <a class="more-menus">更多菜单</a>
-
-
-<ul>
-    <li>
-        <div class="all active" data-rel="All">All
-            
-                <small>(3)</small>
-            
-        </div>
-    </li>
-    
-        
-            
-                <li>
-                    <div data-rel="编译原理">
-                        <i class="fold iconfont icon-right"></i>
-                        
-                        编译原理
-                        <small>(3)</small>
-                        
-                    </div>
-                    
-                        <ul class="sub hide">
-                            
-                                <li>
-                                    <div data-rel="编译原理<--->开篇">
-                                        
-                                        开篇
-                                        
-                                            <small>(1
-                                                )</small>
-                                        
-                                    </div>
-                                    
-                                </li>
-                            
-                                <li>
-                                    <div data-rel="编译原理<--->Part1-前端">
-                                        
-                                        Part1-前端
-                                        
-                                            <small>(2
-                                                )</small>
-                                        
-                                    </div>
-                                    
-                                </li>
-                            
-                        </ul>
-                    
-                </li>
-            
-        
-    
-        
-            
-        
-    
-        
-            
-        
-    
-</ul>
-<div class="left-bottom">
-    <div class="menus">
-        
-            
-            
-            
-                <a class="dynamic-menu "
-                   target="_blank"
-                        
-                   href="https://github.com/yongruifang">github</a>
-        
-    </div>
-    <div>
-        
-        
-    </div>
-</div>
-<input type="hidden" id="yelog_site_posts_number" value="3">
-<input type="hidden" id="yelog_site_word_count" value="928">
-<div style="display: none">
-    <span id="busuanzi_value_site_uv"></span>
-    <span id="busuanzi_value_site_pv"></span>
-</div>
-
-    </div>
-    <div class="nav-right">
-        <div class="friends-area">
-    <div class="friends-title">
-        Links
-        <i class="iconfont icon-left"></i>
-    </div>
-    <div class="friends-content">
-        <ul>
-            
-            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
-            
-        </ul>
-    </div>
-</div>
-        <div class="title-list">
-    <div class="right-top">
-        <div id="default-panel">
-            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
-            <div class="right-title">All</div>
-            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
-        </div>
-        <div id="search-panel">
-            <i class="iconfont icon-left" data-title="返回"></i>
-            <input id="local-search-input" autocomplete="off"/>
-            <label class="border-line" for="input"></label>
-            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
-            <i class="iconfont icon-tag" data-title="标签"></i>
-        </div>
-        <div id="outline-panel" style="display: none">
-            <div class="right-title">大纲</div>
-            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
-        </div>
-    </div>
-
-    <div class="tags-list">
-    <input id="tag-search" />
-    <div class="tag-wrapper">
-        
-            <li class="article-tag-list-item">
-                <i class="iconfont icon-tag"></i><a>编译原理</a>
-            </li>
-        
-            <li class="article-tag-list-item">
-                <i class="iconfont icon-tag"></i><a>开篇</a>
-            </li>
-        
-            <li class="article-tag-list-item">
-                <i class="iconfont icon-tag"></i><a>Part1-前端</a>
-            </li>
-        
-    </div>
-
-</div>
-
-    
-    <div id="local-search-result">
-
-    </div>
-    
-    <nav id="title-list-nav">
-        
-        
-        <a  class="All 编译原理 Part1-前端 "
-           href="/2023/06/08/01-%E5%89%8D%E7%AB%AF%E6%A6%82%E8%A7%88/"
-           data-tag="编译原理,Part1-前端"
-           data-author="" >
-            <span class="post-title" title="01-前端概览">01-前端概览</span>
-            <span class="post-date" title="2023-06-08 21:24:57">2023/06/08</span>
-        </a>
-        
-        
-        <a  class="All 编译原理 开篇 "
-           href="/2023/06/08/00-%E5%AD%A6%E4%B9%A0%E7%90%86%E7%94%B1/"
-           data-tag="编译原理,开篇"
-           data-author="" >
-            <span class="post-title" title="00-学习理由">00-学习理由</span>
-            <span class="post-date" title="2023-06-08 21:24:57">2023/06/08</span>
-        </a>
-        
-        
-        <a  class="All 编译原理 Part1-前端 "
-           href="/2023/06/08/02-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/"
-           data-tag="编译原理,Part1-前端"
-           data-author="" >
-            <span class="post-title" title="02-词法分析">02-词法分析</span>
-            <span class="post-date" title="2023-06-08 21:24:57">2023/06/08</span>
-        </a>
-        
-        <div id="no-item-tips">
-
-        </div>
-    </nav>
-    <div id="outline-list">
-    </div>
-</div>
-
-    </div>
-    <div class="hide-list">
-        <div class="semicircle" data-title="切换全屏 快捷键 s">
-            <div class="brackets first"><</div>
-            <div class="brackets">&gt;</div>
-        </div>
-    </div>
-</aside>
-<div id="post">
-    <div class="pjax">
-        <article id="post-00-学习理由" class="article article-type-post" itemscope itemprop="blogPost">
-    
-        <h1 class="article-title">00-学习理由</h1>
-    
-    <div class="article-meta">
-        
-        
-        
-        <span class="book">
-            <i class="iconfont icon-category"></i>
-            
-            
-            <a  data-rel="编译原理">编译原理</a> > 
-            
-            <a  data-rel="编译原理&lt;---&gt;开篇">开篇</a>
-            
-        </span>
-        
-        
-        <span class="tag">
-            <i class="iconfont icon-tag"></i>
-            
-            <a class="color5">编译原理</a>
-            
-            <a class="color3">开篇</a>
-            
-        </span>
-        
-    </div>
-    <div class="article-meta">
-        
-            Created At : <time class="date" title='Updated At: 2023-06-08 22:22:38'>2023-06-08 21:24</time>
-        
-    </div>
-    <div class="article-meta">
-        
-        <span>Count:413</span>
-        
-        
-        <span id="busuanzi_container_page_pv">
-            Views 👀 :<span id="busuanzi_value_page_pv">
-                <span class="count-comment">
-                    <span class="spinner">
-                      <div class="cube1"></div>
-                      <div class="cube2"></div>
-                    </span>
-                </span>
-            </span>
-        </span>
-        
-        
-    </div>
-    
-    <div class="toc-ref">
-    
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%81%94%E7%B3%BB"><span class="toc-text">联系</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%8B%E6%9C%8D%E7%95%8F%E9%9A%BE%E5%BF%83%E7%90%86"><span class="toc-text">克服畏难心理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%BE%E7%A8%8B%E8%A7%84%E5%88%92"><span class="toc-text">课程规划</span></a></li></ol>
-    
-<style>
-    .left-col .switch-btn,
-    .left-col .switch-area {
-        display: none;
-    }
-    .toc-level-3 i,
-    .toc-level-3 ol {
-        display: none !important;
-    }
-</style>
-</div>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Ryon_blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a><a class="navbar-item" href="/about">关于</a><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="My GitHub" href="https://github.com/h2pl/"><i class="fab fa-github"></i></a><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2023-06-08T13:24:57.271Z" title="2023/6/8 21:24:57">2023-06-08</time></span><span class="level-item">Updated&nbsp;<time dateTime="2023-06-08T14:22:38.775Z" title="2023/6/8 22:22:38">2023-06-08</time></span><span class="level-item"><a class="link-muted" href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a><span> / </span><a class="link-muted" href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E5%BC%80%E7%AF%87/">开篇</a></span><span class="level-item">3 minutes read (About 425 words)</span></div></div><h1 class="title is-3 is-size-4-mobile">00-学习理由</h1><div class="content"><ul>
 <li>很多国外厂商的软件，普遍都具备二次编程能力，拥有自己的语言和生态。</li>
 </ul>
 <h1 id="联系"><a href="#联系" class="headerlink" title="联系"></a>联系</h1><ul>
@@ -400,245 +88,48 @@
 </ul>
 </li>
 </ol>
-
-      
-       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论。 </span>
-    </div>
-</article>
-
-
-
-
-
-
-
-    
-
-
-
-
-    </div>
-    <div class="copyright">
-        <p class="footer-entry">
-    ©2016-2020 Yelog
-</p>
-<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
-
-    </div>
-    <div class="full-toc">
-        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
-<a class="" id="rocket" ></a>
-
-    </div>
-</div>
-
-</body>
-<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
-
-<script src="/js/script.js?v=1.1.0" ></script>
-<script>
-    var img_resize = 'default';
-    function initArticle() {
-        /*渲染对应的表格样式*/
-        
-            $("#post .pjax table").addClass("green_title");
-        
-
-        /*渲染打赏样式*/
-        
-
-        /*高亮代码块行号*/
-        
-        $('pre code').each(function(){
-            var lines = $(this).text().trim().split('\n').length, widther='';
-            if (lines>99) {
-                widther = 'widther'
+</div><div class="article-licensing box"><div class="licensing-title"><p>00-学习理由</p><p><a href="http://yongruifang.github.io/2023/06/08/00-学习理由/">http://yongruifang.github.io/2023/06/08/00-学习理由/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>Ryon</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2023-06-08</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2023-06-08</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a><a class="link-muted mr-2" rel="tag" href="/tags/%E5%BC%80%E7%AF%87/">开篇</a></div><div class="notification is-danger">You need to set <code>install_url</code> to use ShareThis. Please set it in <code>_config.yml</code>.</div></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">Like this article? Support the author with</h3><div class="buttons is-centered"><a class="button donate" href="/" target="_blank" rel="noopener" data-type="afdian"><span class="icon is-small"><i class="fas fa-charging-station"></i></span><span>Afdian.net</span></a><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>Alipay</span><span class="qrcode"><img src="/" alt="Alipay"></span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="buymeacoffee"><span class="icon is-small"><i class="fas fa-coffee"></i></span><span>Buy me a coffee</span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="patreon"><span class="icon is-small"><i class="fab fa-patreon"></i></span><span>Patreon</span></a><div class="notification is-danger">You forgot to set the <code>business</code> or <code>currency_code</code> for Paypal. Please set it in <code>_config.yml</code>.</div><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>Wechat</span><span class="qrcode"><img src="/" alt="Wechat"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2023/06/08/01-%E5%89%8D%E7%AB%AF%E6%A6%82%E8%A7%88/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">01-前端概览</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2023/06/08/02-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/"><span class="level-item">02-词法分析</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div class="notification is-danger">You forgot to set the <code>shortname</code> for Disqus. Please set it in <code>_config.yml</code>.</div></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar" src="/img/avatar.png" alt="Your name"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Your name</p><p class="is-size-6 is-block">Your title</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Your location</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">3</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">3</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">3</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/ppoffice" target="_blank" rel="noopener">Follow</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/ppoffice"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Dribbble" href="https://dribbble.com"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="card widget" data-type="links"><div class="card-content"><div class="menu"><h3 class="menu-label">Links</h3><ul class="menu-list"><li><a class="level is-mobile" href="https://hexo.io" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Hexo</span></span><span class="level-right"><span class="level-item tag">hexo.io</span></span></a></li><li><a class="level is-mobile" href="https://bulma.io" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Bulma</span></span><span class="level-right"><span class="level-item tag">bulma.io</span></span></a></li></ul></div></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/"><span class="level-start"><span class="level-item">编译原理</span></span><span class="level-end"><span class="level-item tag">3</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Part1-%E5%89%8D%E7%AB%AF/"><span class="level-start"><span class="level-item">Part1-前端</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E5%BC%80%E7%AF%87/"><span class="level-start"><span class="level-item">开篇</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">Recents</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-06-08T13:24:57.286Z">2023-06-08</time></p><p class="title"><a href="/2023/06/08/01-%E5%89%8D%E7%AB%AF%E6%A6%82%E8%A7%88/">01-前端概览</a></p><p class="categories"><a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a> / <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Part1-%E5%89%8D%E7%AB%AF/">Part1-前端</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-06-08T13:24:57.271Z">2023-06-08</time></p><p class="title"><a href="/2023/06/08/00-%E5%AD%A6%E4%B9%A0%E7%90%86%E7%94%B1/">00-学习理由</a></p><p class="categories"><a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a> / <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E5%BC%80%E7%AF%87/">开篇</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-06-08T13:24:57.271Z">2023-06-08</time></p><p class="title"><a href="/2023/06/08/02-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90/">02-词法分析</a></p><p class="categories"><a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a> / <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/Part1-%E5%89%8D%E7%AB%AF/">Part1-前端</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">Archives</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2023/"><span class="level-start"><span class="level-item">2023</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">Tags</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/Part1-%E5%89%8D%E7%AB%AF/"><span class="tag">Part1-前端</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%BC%80%E7%AF%87/"><span class="tag">开篇</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/"><span class="tag">编译原理</span><span class="tag">3</span></a></div></div></div></div></div><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">Subscribe for updates</h3><form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open(&#039;https://feedburner.google.com/fb/a/mailverify?uri=&#039;,&#039;popupwindow&#039;,&#039;scrollbars=yes,width=550,height=520&#039;);return true"><input type="hidden" value="" name="uri"><input type="hidden" name="loc" value="en_US"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="Subscribe"></div></div></form></div></div></div><div class="card widget"><div class="card-content"><div class="notification is-danger">You need to set <code>client_id</code> and <code>slot_id</code> to show this AD unit. Please set it in <code>_config.yml</code>.</div></div></div><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">follow.it</h3><form action="" method="post" target="_blank"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="Subscribe"></div></div></form></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Ryon_blog" height="28"></a><p class="is-size-7"><span>&copy; 2023 Ryon</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">© 2019</p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
             }
-            var $numbering = $('<ul/>').addClass('pre-numbering ' + widther).attr("unselectable","on");
-            $(this).addClass('has-numbering ' + widther)
-                    .parent()
-                    .append($numbering);
-            for(var i=1;i<=lines;i++){
-                $numbering.append($('<li/>').text(i));
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
             }
-        });
-        
-
-        /*访问数量*/
-        
-        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
-        
-
-        /*代码高亮，行号对齐*/
-        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
-
-        
-        
-    }
-
-    /*打赏页面隐藏与展示*/
-    
-
-</script>
-
-<!--加入行号的高亮代码块样式-->
-
-<style>
-    pre{
-        position: relative;
-        margin-bottom: 24px;
-        border-radius: 10px;
-        border: 1px solid #e2dede;
-        background: #FFF;
-        overflow: hidden;
-    }
-    code.has-numbering{
-        margin-left: 30px;
-    }
-    code.has-numbering.widther{
-        margin-left: 35px;
-    }
-    .pre-numbering{
-        margin: 0;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 20px;
-        padding: 0.5em 3px 0.7em 5px;
-        border-right: 1px solid #C3CCD0;
-        text-align: right;
-        color: #AAA;
-        background-color: #fafafa;
-    }
-    .pre-numbering.widther {
-        width: 35px;
-    }
-</style>
-
-<!--自定义样式设置-->
-<style>
-    
-    
-    .nav {
-        width: 562px;
-    }
-    .nav.fullscreen {
-        margin-left: -562px;
-    }
-    .nav-left {
-        width: 140px;
-    }
-    
-    
-    @media screen and (max-width: 1468px) {
-        .nav {
-            width: 512px;
-        }
-        .nav.fullscreen {
-            margin-left: -512px;
-        }
-        .nav-left {
-            width: 120px;
-        }
-    }
-    
-    
-    @media screen and (max-width: 1024px) {
-        .nav {
-            width: 512px;
-            margin-left: -512px
-        }
-        .nav.fullscreen {
-            margin-left: 0;
-        }
-    }
-    
-    @media screen and (max-width: 426px) {
-        .nav {
-            width: 100%;
-        }
-        .nav-left {
-            width: 100%;
-        }
-    }
-    
-    
-    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
-        color: #383636;
-    }
-    
-    
-    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
-        color: #5e5e5f;
-    }
-    
-    
-    .nav-right nav a.hover, #local-search-result a.hover{
-        background-color: #e2e0e0;
-    }
-    
-    
-
-    /*列表样式*/
-    
-
-    /* 背景图样式 */
-    
-    #post {
-        background: url(https://fastly.picsum.photos/id/505/1024/1024.jpg?hmac=nLH7POOa3FJtGSbRdFaLMC3T12OyvZDPZVfnjkjqoyY);
-    }
-    
-    
-    #post .index {
-        background: url(https://fastly.picsum.photos/id/505/1024/1024.jpg?hmac=nLH7POOa3FJtGSbRdFaLMC3T12OyvZDPZVfnjkjqoyY);
-    }
-    
-
-
-    /*引用块样式*/
-    
-
-    /*文章列表背景图*/
-    
-    .nav-right:before {
-        content: ' ';
-        display: block;
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0.5;
-        background: url("https://i.loli.net/2019/07/22/5d3521411f3f169375.png");
-        background-repeat: no-repeat;
-        background-position: 50% 0;
-        -ms-background-size: cover;
-        -o-background-size: cover;
-        -moz-background-size: cover;
-        -webkit-background-size: cover;
-        background-size: cover;
-    }
-    
-
-    
-</style>
-
-
-
-
-
-
-<div class="mobile-menus-out" >
-
-</div>
-<div class="mobile-menus">
-    
-    
-    
-    
-    <a class="dynamic-menu " target="_blank"  href="https://github.com/yongruifang">github</a>
-    
-</div>
-
-
-</html>
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>
